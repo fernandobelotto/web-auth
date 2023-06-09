@@ -3,6 +3,8 @@ import { startAuthentication } from '@simplewebauthn/browser';
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../services/api";
+import { useAppDispatch } from "../store";
+import { setUserSession } from "../store/user-sesstion";
 
 export default function LoginPage() {
 
@@ -11,32 +13,37 @@ export default function LoginPage() {
     const toast = useToast()
 
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
 
     const handleLogin = async () => {
 
-        const response = await api.post('/login-options', {
+        const response = await api.post('/auth-options', {
             email: username
         });
+
 
         const options = response.data
 
         const authRes = await startAuthentication(options);
-        const verificationResponse = await api.post('/login-verification', { data: authRes, email: username });
+        const verificationResponse = await api.post('/auth-verification', { data: authRes, email: username });
 
         if (verificationResponse.data.ok) {
+            dispatch(setUserSession(
+                username
+            ))
             navigate('/dashboard')
             toast({
                 title: "Login success.",
                 description: "We've logged you in.",
                 status: "success",
-                duration: 9000,
+                duration: 2000,
             })
         } else {
             toast({
                 title: "Login failed.",
                 description: "Could not sign in",
                 status: "error",
-                duration: 9000,
+                duration: 2000,
             })
         }
     }

@@ -13,6 +13,7 @@ export const Home = () => {
       <VStack>
         <Heading>Congrats you're authenticated!!</Heading>
         <Button onClick={handleLogout}>Logout</Button>
+        <Button onClick={() => navigate('/payments')}>Payments</Button>
       </VStack>
     </Center>
   );

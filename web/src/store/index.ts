@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { api } from "./api";
+import userSessionReducer from './user-sesstion'
 
 const store = configureStore({
   reducer: {
-    [api.reducerPath]: api.reducer,
+    userSession: userSessionReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
 });
 
 type RootState = ReturnType<typeof store.getState>;
